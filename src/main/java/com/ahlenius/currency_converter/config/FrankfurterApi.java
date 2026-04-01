@@ -17,12 +17,11 @@ public class FrankfurterApi {
     // SpringBoot automatskapar en böna "direkt" injecten
     public FrankfurterApi(RestClient.Builder restClient) {
         this.restClient = restClient
-                .baseUrl("https://api.frakenfurter.dev")
+                .baseUrl("https://api.frankfurter.dev")
                 .build();
     }
  // Frankfurter v2 ger svar i en [] även om de bara och oftast är en rad.
     public BigDecimal getRate(String base, String quote) {
-        try {
             FrankfurterResponse[] rate = restClient.get()// Måste man ha rates [] alltså en array? kan de va möjligt att de blir flera? eller kommer alltid svaret som en array?
                     .uri("/v2/rates?base={from}&quotes={to}", base, quote)
                     .retrieve()
@@ -31,8 +30,7 @@ public class FrankfurterApi {
                 throw new NoRateFoundException("Ingen växelkurs hittades för " + base + " till " + quote);
             }
             return rate[0].rate();
-        } catch (Exception e){throw new FrankfurterApiException(e.getMessage()+ "Tjänsten för att hämta växelkurser är tillfälligt nere ");}
-    }
+            }
 
 
 }
